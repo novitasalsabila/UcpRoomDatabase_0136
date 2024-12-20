@@ -1,10 +1,8 @@
 package com.example.ucp2.data.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Update
 import com.example.ucp2.data.entity.Dosen
 import kotlinx.coroutines.flow.Flow
 
@@ -23,10 +21,10 @@ interface DosenDao {
     fun getDosen(nidn: String): Flow<Dosen>
 
     // Fungsi untuk menghapus data dosen
-    @Delete
-    suspend fun deleteDosen(dosen: Dosen)
-
-    // Fungsi untuk memperbarui data dosen
-    @Update
-    suspend fun updateDosen(dosen: Dosen)
+//    @Delete
+//    suspend fun deleteDosen(dosen: Dosen)
+//
+//    // Fungsi untuk memperbarui data dosen
+//    @Update
+//    suspend fun updateDosen(dosen: Dosen)
 }
