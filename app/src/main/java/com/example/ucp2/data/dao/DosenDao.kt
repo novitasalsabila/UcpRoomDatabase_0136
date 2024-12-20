@@ -19,12 +19,4 @@ interface DosenDao {
     // Fungsi untuk mendapatkan data dosen berdasarkan NIDN
     @Query("SELECT * FROM dosen WHERE nidn = :nidn")
     fun getDosen(nidn: String): Flow<Dosen>
-
-    // Fungsi untuk menghapus data dosen
-//    @Delete
-//    suspend fun deleteDosen(dosen: Dosen)
-//
-//    // Fungsi untuk memperbarui data dosen
-//    @Update
-//    suspend fun updateDosen(dosen: Dosen)
 }
