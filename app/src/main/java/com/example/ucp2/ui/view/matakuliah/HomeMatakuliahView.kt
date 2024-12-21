@@ -148,3 +148,25 @@ fun BodyHomeMatakuliahView(
     }
 }
 
+@Composable
+fun ListMatakuliah(
+    listMatakuliah: List<Matakuliah>,
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit = { }
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(
+            items = listMatakuliah,
+            itemContent = { matkul ->
+                CardMatakuliah(
+                    matkul = matkul,
+                    onClick = { onClick(matkul.kode) }
+                )
+            }
+        )
+    }
+}
+
+
