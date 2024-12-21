@@ -10,6 +10,6 @@ class Matakuliah (
     val nama : String,
     val sks : String,
     val semester : String,
-    val jenisKelamin : String,
+    val jenisMatkul : String,
     val dosenPengampu : String
 )
