@@ -52,3 +52,54 @@ object DestinasiInsertMatkul : AlamatNavigasi{
     override val route: String = "insert_matkul"
 } //object dikenal sebagai nama halamnan di insertmhsview
 
+@Composable
+fun InsertMatkulView(
+    onBack:() -> Unit,
+    onNavigate: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: MatakuliahViewModel = viewModel(factory = PenyediaViewModelDosen.Factory)
+){
+    val uiState=viewModel.uiState //ambil ui state dari viewmodel
+    val snackbarHostState = remember { SnackbarHostState() } //snackbar state
+    val coroutineScope = rememberCoroutineScope()
+
+    //observasi perubahan snackbarmassage
+    LaunchedEffect(uiState.snackBarMessage) {
+        uiState.snackBarMessage?.let { message ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message) //tampilansnackbar
+                viewModel.resetSnackBarMessage()
+            }
+        }
+    }
+
+    Scaffold (
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState)}
+    ){ padding ->
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp)
+        ){
+            TopAppBar(
+                onBack = onBack,
+                showBackButton = true,
+                judul = "Tambah MataKuliah",
+                modifier = Modifier
+            )
+            //isi body
+            InsertBodyMatkul(
+                uiState = uiState,
+                onValueChange = { updateEvent ->
+                    viewModel.updateState(updateEvent) //update state di viewmodel
+                },
+                onClick = {
+                    viewModel.saveData() //simpan data
+                    onNavigate()
+                }
+            )
+        }
+    }
+}
