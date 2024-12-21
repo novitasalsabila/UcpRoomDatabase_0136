@@ -246,3 +246,60 @@ fun FormMatkul(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownMenuField(
+    label: String,
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    isError: Boolean = false,
+    errorMessage: String? = null
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var currentSelection by remember { mutableStateOf(selectedOption) }
+
+
+    Column {
+        OutlinedTextField (
+            value = currentSelection,
+            onValueChange = {}, // Tidak memungkinkan input manual
+            readOnly = true,
+            label = { Text (label) },
+            trailingIcon = {
+                IconButton(onClick = { expanded = !expanded }) {
+                    Icon(
+                        imageVector = if (expanded) Icons.Default.ArrowDropDown else Icons.Default.ArrowDropDown,
+                        contentDescription = "Dropdown Icon"
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            isError = isError
+        )
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = {
+                        currentSelection = option
+                        onOptionSelected(option)
+                        expanded = false
+                    }
+                )
+            }
+        }
+
+        if (isError && errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+    }
+}
