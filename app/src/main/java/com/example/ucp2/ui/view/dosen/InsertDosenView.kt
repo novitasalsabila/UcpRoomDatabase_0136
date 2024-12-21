@@ -119,3 +119,67 @@ fun InsertBodyDsn(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+fun FormDosen(
+    dosenEvent: DosenEvent = DosenEvent(),
+    onValueChange: (DosenEvent) -> Unit = {},
+    errorState: FormErrorState = FormErrorState(),
+    modifier: Modifier = Modifier
+) {
+    val jenisKelamin = listOf("Laki-laki", "Perempuan")
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = dosenEvent.nama,
+            onValueChange = {
+                onValueChange(dosenEvent.copy(nama = it))
+            },
+            label = { Text("Nama") },
+            isError = errorState.nama != null,
+            placeholder = { Text("Masukkan nama") },
+        )
+        Text(
+            text = errorState.nama ?: "",
+            color = Color.Red
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = dosenEvent.nidn,
+            onValueChange = {
+                onValueChange(dosenEvent.copy(nidn = it))
+            },
+            label = { Text("NIDN") },
+            isError = errorState.nidn != null,
+            placeholder = { Text("Masukkan NIDN") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Text(
+            text = errorState.nidn ?: "",
+            color = Color.Red
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Jenis Kelamin")
+        Row(modifier = Modifier.fillMaxWidth()) {
+            jenisKelamin.forEach { jk ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    RadioButton(
+                        selected = dosenEvent.jenisKelamin == jk,
+                        onClick = {
+                            onValueChange(dosenEvent.copy(jenisKelamin = jk))
+                        },
+                    )
+                    Text(
+                        text = jk,
+                    )
+                }
+            }
+        }
+    }
+}
