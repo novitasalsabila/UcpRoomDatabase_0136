@@ -29,3 +29,21 @@ fun UpdateMataKuliahView(
     modifier: Modifier = Modifier,
     viewModel: UpdateMataKuliahViewModel = viewModel(factory = PenyediaViewModelDosen.Factory)
 ) {
+    val uiState = viewModel.updateUiState
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(uiState.snackBarMessage) {
+        uiState.snackBarMessage?.let { message ->
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = message,
+                    duration = SnackbarDuration.Long
+                )
+                viewModel.resetSnackBarMessage()
+            }
+        }
+    }
+
+
+}
