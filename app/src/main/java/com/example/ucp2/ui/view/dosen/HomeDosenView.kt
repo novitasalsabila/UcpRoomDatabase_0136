@@ -148,4 +148,25 @@ fun BodyHomeDosenView (
         }
     }
 }
+@Composable
+fun ListDosen (
+    listDsn: List<Dosen>,
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit = { }
+) {
+    LazyColumn(
+        modifier = modifier
+
+    ) {
+        items(
+            items = listDsn,
+            itemContent = { dsn ->
+                CardDosen(
+                    dsn = dsn,
+                    onClick = { onClick(dsn.nidn) }
+                )
+            }
+        )
+    }
+}
 
