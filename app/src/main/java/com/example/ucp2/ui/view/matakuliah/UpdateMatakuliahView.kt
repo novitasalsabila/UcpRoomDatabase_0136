@@ -62,6 +62,25 @@ fun UpdateMataKuliahView(
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp)
-        )
+        ){
+            // Isi Body
+            InsertBodyMatkul(
+                uiState = uiState,
+                onValueChange = { updateEvent ->
+                    viewModel.updateState(updateEvent)
+                },
+                onClick = {
+                    coroutineScope.launch {
+                        if (viewModel.validateFields()) {
+                            viewModel.updateData()
+                            delay(500)
+                            withContext(Dispatchers.Main) {
+                                onNavigate()
+                            }
+                        }
+                    }
+                }
+            )
+        }
     }
 }
