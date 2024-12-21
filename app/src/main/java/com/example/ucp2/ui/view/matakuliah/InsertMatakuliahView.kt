@@ -103,3 +103,146 @@ fun InsertMatkulView(
         }
     }
 }
+@Composable
+fun InsertBodyMatkul(
+    modifier: Modifier = Modifier,
+    onValueChange: (MatakuliahEvent) -> Unit,
+    uiState: MatkulUIState,
+    onClick: () -> Unit
+){
+    Column (
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        FormMatkul(
+            matkulEvent = uiState.matakuliahEvent,
+            onValueChange = onValueChange,
+            errorState = uiState.isEntryValid,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Button(
+            onClick=onClick,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text("Simpan")
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun FormMatkul(
+    matkulEvent: MatakuliahEvent = MatakuliahEvent(),
+    onValueChange : (MatakuliahEvent) -> Unit = {},
+    errorState: FormErrorState = FormErrorState(),
+    modifier: Modifier = Modifier,
+    DosenViewModel: DosenViewModel = viewModel(factory = PenyediaViewModelDosen.Factory)
+){
+    val DosenUIState by DosenViewModel.DosenUIState.collectAsState()
+    val listDosen = DosenUIState.listDosen.map{it.nama}
+    val semester = listOf("Genap","Ganjil")
+    val jenis = listOf("Wajib","Tidak")
+
+    Column (modifier = modifier.fillMaxWidth())
+    {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = matkulEvent.kode,
+            onValueChange = {
+                onValueChange(matkulEvent.copy(kode = it))
+            },
+            label = { Text("KODE") },
+            isError = errorState.kode != null,
+            placeholder = { Text("Masukan KODE") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = matkulEvent.nama,
+            onValueChange = {
+                onValueChange(matkulEvent.copy(nama = it))
+            },
+            label = { Text("Nama")},
+            isError = errorState.nama != null,
+            placeholder = { Text("Masukan nama")},
+        )
+        Text(
+            text = errorState.nama ?: "",
+            color = Color.Red
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = matkulEvent.sks,
+            onValueChange = {
+                onValueChange(matkulEvent.copy(sks = it))
+            },
+            label = { Text("sks")},
+            isError = errorState.sks != null,
+            placeholder = { Text("Masukan SKS")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Text(
+            text = errorState.sks ?: "",
+            color = Color.Red
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Semester")
+        Row (modifier = Modifier.fillMaxWidth()
+        ){
+            semester.forEach{sem ->
+                Row  (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ){
+                    RadioButton(
+                        selected = matkulEvent.semester == sem,
+                        onClick = {
+                            onValueChange(matkulEvent.copy(semester = sem))
+                        },
+                    )
+                    Text(
+                        text = sem,
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Jenis Matakuliah")
+        Row (modifier = Modifier.fillMaxWidth()
+        ){
+            jenis.forEach{jk ->
+                Row  (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ){
+                    RadioButton(
+                        selected = matkulEvent.jenisMatkul == jk,
+                        onClick = {
+                            onValueChange(matkulEvent.copy(jenisMatkul = jk))
+                        },
+                    )
+                    Text(
+                        text = jk,
+                    )
+                }
+            }
+        }
+
+        DropdownMenuField(
+            label = "Nama Dosen Pengampu",
+            options = listDosen,
+            selectedOption = matkulEvent.dosenPengampu,
+            onOptionSelected = {
+                    selectedDosen -> onValueChange(matkulEvent.copy(dosenPengampu = selectedDosen))
+            },
+            isError = errorState.dosenPengampu != null,
+            errorMessage = errorState.dosenPengampu
+        )
+
+    }
+}
+
