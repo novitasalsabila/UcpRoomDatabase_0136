@@ -45,5 +45,16 @@ fun UpdateMataKuliahView(
         }
     }
 
-
+    Scaffold(
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                judul = "Edit Mata Kuliah",
+                showBackButton = true,
+                onBack = onBack,
+                modifier = modifier
+            )
+        }
+    )
 }
